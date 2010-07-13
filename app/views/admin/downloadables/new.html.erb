@@ -1,0 +1,18 @@
+<h4><%= t('new_downloadable_file')%></h4>
+<% form_for(:downloadable, :url => { :controller => 'downloadables', :action => 'create' }, :html => { :multipart => true }) do |f| %>
+  
+    <%= render :partial => 'form', :locals => {:f => f} %>
+    
+    <p class="form-buttons">
+      <%= button t("update") %>
+      or <%= link_to t("cancel"), "#", :id => "cancel_link" %>
+    </p>
+<% end %>
+
+<script type="text/javascript">
+  $('#cancel_link').click(function(event){
+    $('#new_downloadable_link').show();
+    $('#downloads').html('');
+  });
+</script>
+

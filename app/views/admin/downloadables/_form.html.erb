@@ -1,0 +1,26 @@
+<table class="basic-table">
+  <tr>
+    <td><%= f.label :name, t('filename') %></td>
+    <td><%= f.file_field :attachment %></td>
+  </tr>
+  <tr>
+    <td><%= f.label :title %></td>
+    <td><%= f.text_field :title %></td>
+  </tr>
+  <tr>
+    <td><%= f.label :description %></td>
+    <td><%= f.text_field :description %></td>
+  </tr>
+  <tr>
+    <td><%= f.label :enabled %></td>
+    <td><%= f.check_box :enabled %></td>
+  </tr>
+  <% if @product.has_variants? %>
+    <tr>
+      <td><%= f.label "#{Variant.human_name} :" %></td>
+      <td><%= f.select :viewable_id, @variants %>
+    </tr>
+  <% else %>
+    <%= hidden_field_tag :product_id, @product.id %>
+  <% end %>
+</table>

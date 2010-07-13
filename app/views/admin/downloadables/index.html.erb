@@ -2,51 +2,22 @@
 
 <%= render :partial => 'admin/shared/product_tabs', :locals => {:current => "Downloadables"} %>
 
-<div class="yui-g">
-
-  <div class="yui-u first">
-	<% form_for(:downloadable, :url => { :controller => 'downloadables', :action => 'create' }, :html => { :multipart => true }) do |f| %>
-	  	<fieldset>
-			<legend>New downloadable file</legend>
-			<% f.field_container :name do %>
-				<%= f.label :name, t("filename") %> <span class="required">*</span> <br/>
-				<%= f.file_field :attachment %>
-		  <% end %> 
-		
-			<% f.field_container :title do %>
-				<%= f.label t("title") %><span> <sup>Defaults to filename</sup></span><br/>
-				<%= f.text_field :title %>
-		  <% end %>
-	
-			<% f.field_container :description do %>
-				<%= f.label t("description") %><br/>
-				<%= f.text_field :description %>
-		  <% end %>
-		  
-		  <% f.field_container :viewable_id do %>
-  		  <% if @product.has_variants? %>
-          <%= f.label Variant.human_name + ": " %>
-          <%= f.select :viewable_id, @variants %>
-        <% else %>
-          <%= hidden_field_tag :product_id, @product.id %>
-        <% end %>
-      <% end %>
-      
-      
-      <p class="form-buttons">
-        <%= button t("update") %>
-        or <%= link_to t("cancel"), "#", :id => "cancel_link" %>
-      </p>
-		</fieldset>
-	<% end %>
-  </div>
-</div>
-
 <% content_for :head  do %>
   <script type="text/javascript">
      jQuery(document).ready(function(){  
       jQuery("#downloadable_viewable_id").change( function() {
         console.log(jQuery(this).val());
+      });
+
+      $('#new_downloadable_link a').click(function(event){
+        event.preventDefault();
+        $('#new_downloadable_link').hide()
+        $.ajax({
+          type: 'GET',
+          url: this.href,
+          data: {authenticity_token: AUTH_TOKEN},
+          success: function(r){ $('#downloads').html(r) } 
+        });
       });
     });
 
@@ -59,16 +30,18 @@
 	    <th><%= Variant.human_name %></th>
 	  <% end %>
 		<th><%= t("filename(s)") %></th>
+    <th><%= t("title") %></th>
 		<th><%= t("description") %></th>
 		<th width="40px"><%= t("enabled") %></th>
 		<th width="120px"><%= t("action") %></th>
 	</tr>
   <% @product.downloadables.each do |downloadable| %>
-    <tr>
+    <tr id="<%= dom_id downloadable %>">
       <% if @product.has_variants? %>
         <td><%= t('all') %></td>
       <% end %>
       <td><%= link_to(downloadable.filename, downloadable.attachment.url(:product)) %></td>
+      <td><%= downloadable.title %></td>
       <td><%= h(downloadable.description) %></td>
       <td><%= check_box_tag 'downloadable', 'enabled', downloadable.enabled, :disabled => true %></td>
       <td class="actions" style="padding:0px;">
@@ -127,3 +100,9 @@
 	  </tr>
   <% end %>
 </table>
+
+<div id="downloads"></div>
+
+<p id="new_downloadable_link">
+  <%= link_to icon('add') + ' ' + t('new_downloadable_file'), new_admin_product_downloadable_url(@product) %>
+</p>
