@@ -1,0 +1,7 @@
+en-GB:
+  filename(s): "Filename"
+  enabled: "Enabled"
+  downloadables: "Downloadables"
+  new_downloadable_file: "New Downloadable File"
+  zip_file_description: "Bundle zip file"
+  downloads: "Downloads"
