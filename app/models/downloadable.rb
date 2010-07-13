@@ -58,11 +58,12 @@ class Downloadable < ProductDownload
        # check if there is an existing zip file Downloadable object. 
        unless(zip_downloadable = Downloadable.find(:first, :conditions => ["attachment_file_name = ?", bundle_filename]))
          zip_downloadable = Downloadable.new
+         zip_downloadable.enabled = PA_CONFIG['bundle_enabled_by_default']
        end
        zip_downloadable.viewable_id = viewable_id
        zip_downloadable.viewable_type = viewable_type
        # zip_downloadable.download_limit = download_limit
-       zip_downloadable.description = I18n::t('zip-file-description')
+       zip_downloadable.description = I18n::t('zip_file_description')
        zip_downloadable.attachment = File.new(bundle_fullpath)
        zip_downloadable.attachment_content_type = "application/zip"
        zip_downloadable.save
