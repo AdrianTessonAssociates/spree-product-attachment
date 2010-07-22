@@ -1,6 +1,5 @@
-<hr style="width:50%"/>
-
 <% unless @product.downloadables.blank? %>
+  <hr style="width:50%"/>
   <h2><%= t('downloads') %></h2>
 
   <ul> <% @product.downloadables.each do |downloadable| %>
