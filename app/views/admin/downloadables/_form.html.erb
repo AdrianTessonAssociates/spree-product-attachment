@@ -15,12 +15,5 @@
     <td><%= f.label :enabled %></td>
     <td><%= f.check_box :enabled %></td>
   </tr>
-  <% if @product.has_variants? %>
-    <tr>
-      <td><%= f.label "#{Variant.human_name} :" %></td>
-      <td><%= f.select :viewable_id, @variants %>
-    </tr>
-  <% else %>
-    <%= hidden_field_tag :product_id, @product.id %>
-  <% end %>
+  <%= hidden_field_tag :product_id, @product.id %>
 </table>
